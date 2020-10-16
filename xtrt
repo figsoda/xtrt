@@ -2,7 +2,7 @@
 
 panic() {
     echo "$1"
-    exit
+    exit 1
 }
 
 for file in "$@"; do
