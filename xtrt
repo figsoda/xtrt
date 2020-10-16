@@ -11,12 +11,10 @@ for ((i=1;i<=len;i++)); do
     arg="${!i}"
     case "$arg" in
         -o|--output)
-            if [ "$i" -eq "$len" ]; then
-                panic "$arg requires an argument"
-            else
-                let i++
-                out="${!i}"
-            fi;;
+            [ "$i" -eq "$len" ] && panic "$arg requires an argument"
+            ((i++))
+            out="${!i}"
+            ;;
         *)
             [ -f "$arg" ] || panic "$arg does not exist"
             files+=("$arg")
