@@ -1,0 +1,45 @@
+#!/bin/bash
+
+panic() {
+    echo "$1"
+    exit
+}
+
+for file in "$@"; do
+    [ -f "$file" ] || panic "$file does not exist"
+
+    IFS=. read -a xs <<< "$file"
+    len="${#xs[@]}"
+    [ "$len" -lt 2 ] && panic "$file does not have a file extension"
+
+    case "${xs[-1]}" in
+        bz2)
+            if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
+                tar xfj "$file"
+            else
+                bzip2 -d "$file"
+            fi;;
+        gz)
+            if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
+                tar xfz "$file"
+            else
+                gzip -d "$file"
+            fi;;
+        tar)
+            tar xf "$file";;
+        tbz2)
+            tar xfj "$file";;
+        tgz)
+            tar xfz "$file";;
+        txz)
+            tar xfJ "$file";;
+        xz)
+            if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
+                tar xfJ "$file"
+            else
+                xz -d "$file"
+            fi;;
+        zip)
+            unzip "$file";;
+    esac
+done
