@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 panic() {
     echo "$1"
     exit 1
