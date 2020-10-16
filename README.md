@@ -6,12 +6,11 @@ Tiny script to extract archives according to their extension
 ## Usage
 
 ```shell
-bash xtrt [FILE]...
+xtrt [FILES] [OPTIONS]
 ```
 
-or
+### OPTIONS
 
-```shell
-chmod +x xtrt
-./xtrt [FILE]...
+```
+-o, --output <output>    Specify the output directory
 ```
