@@ -13,5 +13,5 @@ or
 
 ```shell
 chmod +x xtrt
-xtrt [FILE]...
+./xtrt [FILE]...
 ```
