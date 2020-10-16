@@ -94,7 +94,7 @@ for file in "${files[@]}"; do
             if [ -z "$out" ]; then
                 unzip "$file"
             else
-                unzip "$file" -C "$out"
+                unzip "$file" -d "$out"
             fi;;
     esac
 done
