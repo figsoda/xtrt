@@ -5,9 +5,27 @@ panic() {
     exit 1
 }
 
-for file in "$@"; do
-    [ -f "$file" ] || panic "$file does not exist"
+files=()
+len=$#
+for ((i=1;i<=len;i++)); do
+    arg="${!i}"
+    case "$arg" in
+        -o|--output)
+            if [ "$i" -eq "$len" ]; then
+                panic "$arg requires an argument"
+            else
+                let i++
+                out="${!i}"
+            fi;;
+        *)
+            [ -f "$arg" ] && files+=("$arg") || panic "$arg does not exist";;
+    esac
+done
 
+[ -n "$out" ] && mkdir -p "$out"
+[ "${#files[@]}" -eq 0 ] && exit 0
+
+for file in "${files[@]}"; do
     IFS=. read -a xs <<< "$file"
     len="${#xs[@]}"
     [ "$len" -lt 2 ] && panic "$file does not have a file extension"
@@ -15,31 +33,34 @@ for file in "$@"; do
     case "${xs[-1]}" in
         bz2)
             if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
-                tar xfj "$file"
+                [ -z "$out" ] && tar xfj "$file" || tar xfj "$file" -C "$out"
             else
+                [ -n "$out" ] && echo "bzip2 does not support changing output directory"
                 bzip2 -d "$file"
             fi;;
         gz)
             if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
-                tar xfz "$file"
+                [ -z "$out" ] && tar xfz "$file" || tar xfz "$file" -C "$out"
             else
+                [ -n "$out" ] && echo "gzip does not support changing output directory"
                 gzip -d "$file"
             fi;;
         tar)
-            tar xf "$file";;
+            [ -z "$out" ] && tar xf "$file" || tar xf "$file" -C "$out";;
         tbz2)
-            tar xfj "$file";;
+            [ -z "$out" ] && tar xfj "$file" || tar xfj "$file" -C "$out";;
         tgz)
-            tar xfz "$file";;
+            [ -z "$out" ] && tar xfz "$file" || tar xfz "$file" -C "$out";;
         txz)
-            tar xfJ "$file";;
+            [ -z "$out" ] && tar xfJ "$file" || tar xfJ "$file" -C "$out";;
         xz)
             if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
-                tar xfJ "$file"
+                [ -z "$out" ] && tar xfJ "$file" || tar xfJ "$file" -C "$out"
             else
+                [ -n "$out" ] && echo "xz does not support changing output directory"
                 xz -d "$file"
             fi;;
         zip)
-            unzip "$file";;
+            [ -z "$out" ] && unzip "$file" || unzip "$file" -C "$out";;
     esac
 done
