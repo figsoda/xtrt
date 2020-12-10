@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+unset out
 
 panic() {
     echo "$1"
