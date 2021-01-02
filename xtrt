@@ -35,25 +35,25 @@ for file in "${files[@]}"; do
 
     case "${xs[-1]}" in
         bz2)
-            if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
+            if [ "$len" -gt 2 ] && [ "${xs[-2]}" = "tar" ]; then
                 if [ -z "$out" ]; then
                     tar xfj "$file"
                 else
                     tar xfj "$file" -C "$out"
                 fi
             else
-                [ -n "$out" ] && echo "bzip2 does not support changing output directory"
+                [ -n "$out" ] && echo "bzip2" "does not support changing output directory"
                 bzip2 -d "$file"
             fi;;
         gz)
-            if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
+            if [ "$len" -gt 2 ] && [ "${xs[-2]}" = "tar" ]; then
                 if [ -z "$out" ]; then
                     tar xfz "$file"
                 else
                     tar xfz "$file" -C "$out"
                 fi
             else
-                [ -n "$out" ] && echo "gzip does not support changing output directory"
+                [ -n "$out" ] && echo "gzip" "does not support changing output directory"
                 gzip -d "$file"
             fi;;
         tar)
@@ -81,14 +81,14 @@ for file in "${files[@]}"; do
                 tar xfJ "$file" -C "$out"
             fi;;
         xz)
-            if [ "$len" -gt 2 ] && [ "${xs[-2]}" == tar ]; then
+            if [ "$len" -gt 2 ] && [ "${xs[-2]}" = "tar" ]; then
                 if [ -z "$out" ]; then
                     tar xfJ "$file"
                 else
                     tar xfJ "$file" -C "$out"
                 fi
             else
-                [ -n "$out" ] && echo "xz does not support changing output directory"
+                [ -n "$out" ] && echo "xz" "does not support changing output directory"
                 xz -d "$file"
             fi;;
         zip)
