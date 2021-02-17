@@ -1,6 +1,6 @@
 # xtrt
 
-Tiny script to extract archives according to their extension
+Tiny script to extract archives by their extensions
 
 
 ## Usage
